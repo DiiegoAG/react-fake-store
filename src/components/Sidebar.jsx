@@ -1,12 +1,16 @@
 import { useState } from "react"
 import useFetch from "../hooks/useFetch"
 
-const Sidebar = ({children}) => {
+const Sidebar = ({children, setFilter}) => {
     const [dropDown, setDropDown] = useState(true)
-    const { data, isPending, error } = useFetch('https://fakestoreapi.com/products/categories')
+    const { data, isPending, error } = useFetch(import.meta.env.VITE_APP_API_URL + 'products/categories')
 
     const handleButton = () => {
         setDropDown(! dropDown)
+    }
+
+    const handleCategory = (item) => {
+        setFilter({category: item})
     }
 
     return (
@@ -17,11 +21,10 @@ const Sidebar = ({children}) => {
                         <div className="flex items-center justify-start rtl:justify-end">
                             <button data-drawer-target="logo-sidebar" data-drawer-toggle="logo-sidebar" aria-controls="logo-sidebar" type="button" className="inline-flex items-center p-2 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600">
                                 <span className="sr-only">Open sidebar</span>
-
                             </button>
                             <a href="https://flowbite.com" className="flex ms-2 md:me-24">
-                            <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
-                            <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Flowbite</span>
+                                <img src="https://flowbite.com/docs/images/logo.svg" className="h-8 me-3" alt="FlowBite Logo" />
+                                <span className="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white">Flowbite</span>
                             </a>
                         </div>
                     </div>
@@ -40,9 +43,22 @@ const Sidebar = ({children}) => {
                                 </svg>
                             </button>
                             <ul id="dropdown-example" className="hidden py-2 space-y-2" style={{display: dropDown ? 'block' : 'none'}}>
+                                {isPending &&
+                                    <div className="max-w-sm animate-pulse">
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                        <div className="h-2.5 bg-gray-200 rounded-full dark:bg-gray-700 w-48 mb-4"></div>
+                                    </div>
+                                }
+                                {data && <li><a href="#" className="flex capitalize items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" onClick={() => handleCategory('all')}>All</a>
+                                    </li>
+                                }
                                 {data && data.map((item, index) => (
                                     <li key={index}>
-                                        <a href="#" className="flex items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700">{item}</a>
+                                        <a href="#" className="flex capitalize items-center w-full p-2 text-gray-900 transition duration-75 rounded-lg pl-11 group hover:bg-gray-100 dark:text-white dark:hover:bg-gray-700" onClick={() => handleCategory(item)}>{item}</a>
                                     </li>
                                 ))}
                             </ul>
