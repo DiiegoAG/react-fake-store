@@ -10,6 +10,8 @@ const App = () => {
       </Sidebar>
     </>
   )
+    const appName = import.meta.env.VITE_APP_NAME
+    document.title = appName;
 }
 
 export default App;

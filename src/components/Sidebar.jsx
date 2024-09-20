@@ -4,6 +4,7 @@ import useFetch from "../hooks/useFetch"
 const Sidebar = ({children}) => {
     const [dropDown, setDropDown] = useState(true)
     const { data, isPending, error } = useFetch('https://fakestoreapi.com/products/categories')
+    const { data, isPending, error } = useFetch(import.meta.env.VITE_APP_API_URL + 'products/categories')
 
     const handleButton = () => {
         setDropDown(! dropDown)
